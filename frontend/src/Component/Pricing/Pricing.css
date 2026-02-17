@@ -1,0 +1,514 @@
+/* Pricing.css */
+
+/* Base Styles */
+.pricing-page {
+  padding: 3rem 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.pricing-page h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #7f8c8d;
+  margin-bottom: 3rem;
+}
+
+/* Pricing Cards Container */
+.pricing-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+/* Pricing Card */
+.pricing-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+  width: 300px;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.pricing-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+}
+
+.pricing-card.popular {
+  border: 2px solid #3498db;
+  transform: scale(1.05);
+}
+
+.popular-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #3498db;
+  color: white;
+  padding: 0.4rem 1.5rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.plan-name {
+  font-size: 1.8rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.plan-price {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #3498db;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.price-period {
+  font-size: 1rem;
+  color: #7f8c8d;
+  font-weight: 400;
+}
+
+.plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+  flex-grow: 1;
+}
+
+.plan-features li {
+  padding: 0.7rem 0;
+  border-bottom: 1px solid #f1f1f1;
+  color: #555;
+  display: flex;
+  align-items: center;
+}
+
+.feature-check {
+  color: #2ecc71;
+  font-weight: bold;
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+.buy-btn {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  width: 100%;
+}
+
+.buy-btn:hover {
+  background: #2980b9;
+}
+
+.popular-btn {
+  background: #2ecc71;
+}
+
+.popular-btn:hover {
+  background: #27ae60;
+}
+
+/* Popup Overlay */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Popup Container */
+.popup-container {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 1000px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.close-btn_1 {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: #f1f1f1;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.8rem;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease;
+}
+
+.close-btn:hover {
+  background: #e74c3c;
+  color: white;
+}
+
+/* Popup Content */
+.popup-content {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 500px;
+}
+
+.plan-details {
+  flex: 1;
+  min-width: 300px;
+  padding: 2.5rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #e8f4fc 100%);
+  border-radius: 16px 0 0 16px;
+}
+/* Alert Popup Styles */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-box {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  animation: popupFadeIn 0.3s ease;
+}
+
+.popup-box.success {
+  border-top: 5px solid #227ec5;
+}
+
+.popup-box.error {
+  border-top: 5px solid #ef4444;
+}
+
+.popup-icon {
+  font-size: 48px;
+  margin-bottom: 15px;
+}
+
+.popup-box h3 {
+  margin: 10px 0;
+  color: #333;
+  font-size: 24px;
+}
+
+.popup-box p {
+  color: #666;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.popup-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+  width: 100%;
+  max-width: 200px;
+}
+
+.popup-btn:hover {
+  background: #1d4ed8;
+}
+
+@keyframes popupFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.purchase-form {
+  flex: 1;
+  min-width: 300px;
+  padding: 2.5rem;
+}
+
+.plan-details h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+.plan-price-large {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #3498db;
+  margin-bottom: 1rem;
+}
+
+.plan-price-large span {
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  font-weight: 400;
+}
+
+.plan-description {
+  color: #555;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  margin-bottom: 2rem;
+}
+
+.features-list h3, .plan-benefits h3 {
+  color: #2c3e50;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.features-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.features-list li {
+  padding: 0.5rem 0;
+  color: #555;
+  display: flex;
+  align-items: center;
+}
+
+.feature-icon {
+  color: #2ecc71;
+  font-weight: bold;
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+.plan-benefits p {
+  color: #555;
+  padding: 0.3rem 0;
+}
+
+/* Form Styles */
+.purchase-form h2 {
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.9rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border 0.3s ease;
+}
+
+.form-group input:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.payment-option:hover {
+  border-color: #3498db;
+  background: #f8fafc;
+}
+
+.payment-option input {
+  margin-right: 10px;
+  width: auto;
+}
+
+/* Order Summary */
+.order-summary {
+  background: #f8fafc;
+  padding: 1.5rem;
+  border-radius: 10px;
+  margin: 2rem 0;
+}
+
+.order-summary h3 {
+  margin-top: 0;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #eee;
+  color: #555;
+}
+
+.summary-row.total {
+  border-bottom: none;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #2c3e50;
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  border-top: 2px solid #ddd;
+}
+
+.submit-btn {
+  background: #2ecc71;
+  color: white;
+  border: none;
+  padding: 1.2rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  width: 100%;
+}
+
+.submit-btn:hover {
+  background: #27ae60;
+}
+
+.secure-note {
+  text-align: center;
+  color: #7f8c8d;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .pricing-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .pricing-card {
+    width: 100%;
+    max-width: 350px;
+  }
+  
+  .pricing-card.popular {
+    transform: none;
+  }
+  
+  .popup-content {
+    flex-direction: column;
+  }
+  
+  .plan-details {
+    border-radius: 16px 16px 0 0;
+  }
+  
+  .purchase-form {
+    border-radius: 0 0 16px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pricing-page h1 {
+    font-size: 2rem;
+  }
+  
+  .plan-price-large {
+    font-size: 2.5rem;
+  }
+  
+  .popup-container {
+    padding: 0;
+  }
+  
+  .plan-details, .purchase-form {
+    padding: 1.5rem;
+  }
+}

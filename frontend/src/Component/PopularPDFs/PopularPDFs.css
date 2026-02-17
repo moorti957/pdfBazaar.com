@@ -1,0 +1,92 @@
+.popular-section {
+  background: linear-gradient(90deg, #ffffff, #d1e5fa 100%);
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.popular-section h2 {
+  font-size: 2.2rem;
+  color: #0a3d62;
+  margin-bottom: 10px;
+}
+
+.popular-section h2 span {
+  color: #0078d7;
+}
+
+.popular-subtitle {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 50px;
+}
+
+/* 🔹 Container */
+.pdf-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+}
+
+/* 🔹 Card */
+.pdf-card {
+  background: #f9fcff;
+  width: 230px;
+  border-radius: 16px;
+  padding: 25px 15px;
+  box-shadow: 0 4px 15px rgba(0, 120, 215, 0.15);
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.pdf-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 6px 20px rgba(0, 120, 215, 0.25);
+}
+
+/* 🔹 Image */
+.pdf-card img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 20px;
+}
+
+/* 🔹 Title */
+.pdf-card h3 {
+  font-size: 1.1rem;
+  color: #0a3d62;
+  margin-bottom: 10px;
+}
+
+/* 🔹 Price */
+.pdf-price {
+  font-weight: 600;
+  color: #0078d7;
+  margin-bottom: 15px;
+}
+
+/* 🔹 Button */
+.buy-btn {
+  background: #0078d7;
+  color: #fff;
+  border: none;
+  outline: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.buy-btn:hover {
+  background: #005fa3;
+  transform: scale(1.05);
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  .pdf-card {
+    width: 80%;
+  }
+}

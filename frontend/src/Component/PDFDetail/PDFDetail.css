@@ -1,0 +1,88 @@
+.pdf-detail {
+  padding: 80px 20px;
+  background: #f0f8ff;
+  min-height: 80vh;
+}
+
+.pdf-detail-container {
+  display: flex;
+  gap: 50px;
+  max-width: 900px;
+  margin: auto;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.pdf-detail-container img {
+  width: 250px;
+  height: 250px;
+  object-fit: contain;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 120, 215, 0.15);
+}
+
+.pdf-detail-info h1 {
+  font-size: 2rem;
+  color: #0a3d62;
+  margin-bottom: 15px;
+}
+
+.pdf-detail-info .pdf-desc {
+  font-size: 1rem;
+  margin-bottom: 15px;
+  color: #555;
+}
+
+.pdf-detail-info .pdf-content {
+  font-size: 0.95rem;
+  margin-bottom: 15px;
+  color: #444;
+}
+
+.pdf-detail-info .pdf-price {
+  font-weight: 600;
+  color: #0078d7;
+  margin-bottom: 20px;
+}
+
+.unlock-btn {
+  padding: 12px 25px;
+  background: #0078d7;
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.unlock-btn:hover {
+  background: #005fa3;
+  transform: scale(1.05);
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 20px;
+  color: #0078d7;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  .pdf-detail-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .pdf-detail-container img {
+    width: 200px;
+    height: 200px;
+  }
+}

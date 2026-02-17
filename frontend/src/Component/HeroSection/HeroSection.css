@@ -1,0 +1,112 @@
+.hero-section {
+  background: linear-gradient(90deg, #ffffff, #d1e5fa 100%);
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.hero-content {
+  max-width: 600px;
+}
+
+.hero-content h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #0a3d62;
+  margin-bottom: 20px;
+}
+
+.hero-content h1 span {
+  color: #0078d7;
+}
+
+.hero-content p {
+  font-size: 1.1rem;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 35px;
+}
+
+/* 🔹 Buttons */
+.hero-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background: #0078d7;
+  color: #fff;
+  padding: 12px 28px;
+  border-radius: 25px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: #005fa3;
+  transform: scale(1.05);
+}
+
+.btn-secondary {
+  border: 2px solid #0078d7;
+  color: #0078d7;
+  padding: 12px 28px;
+  border-radius: 25px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: #0078d7;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* 🔹 Image Section */
+.hero-image {
+  max-width: 400px;
+  margin-top: 40px;
+}
+
+.hero-image img {
+  width: 100%;
+  height: auto;
+  animation: float 3s ease-in-out infinite;
+}
+
+/* 🔹 Floating Animation */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 2.2rem;
+  }
+
+  .hero-content p {
+    font-size: 1rem;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    gap: 15px;
+  }
+}

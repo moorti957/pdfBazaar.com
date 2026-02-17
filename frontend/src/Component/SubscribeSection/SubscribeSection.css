@@ -1,0 +1,62 @@
+.subscribe-section {
+  background: linear-gradient(90deg, #a0e2f7, #007af4);
+  padding: 80px 20px;
+  text-align: center;
+  color: #fff;
+  border-radius: 0;
+}
+
+.subscribe-content h2 {
+  font-size: 2rem;
+  margin-bottom: 15px;
+}
+
+.subscribe-content p {
+  font-size: 1rem;
+  margin-bottom: 30px;
+  opacity: 0.9;
+}
+
+/* 🔹 Form */
+.subscribe-form {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.subscribe-form input {
+  padding: 12px 20px;
+  width: 300px;
+  border-radius: 25px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+}
+
+.subscribe-form button {
+  padding: 12px 25px;
+  background-color: #ffeb3b;
+  border: none;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #0078d7;
+  transition: all 0.3s ease;
+}
+
+.subscribe-form button:hover {
+  background-color: #fff;
+  transform: scale(1.05);
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  .subscribe-form input {
+    width: 80%;
+  }
+
+  .subscribe-form button {
+    width: 80%;
+  }
+}
