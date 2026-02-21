@@ -1132,9 +1132,28 @@
   background: #2980b9;
   transform: translateY(-2px);
 }
+.favorite-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.heart-icon {
+  color: #aaa;   /* transparent type look */
+  transition: 0.3s ease;
+}
+
+.heart-icon.active {
+  color: red;
+}
+
+.favorite-btn:hover .heart-icon {
+  transform: scale(1.2);
+}
 
 /* Pagination Info */
-.pagination-info {
+.pagination-info1 {
   text-align: center;
   color: #7f8c8d;
   font-size: 14px;

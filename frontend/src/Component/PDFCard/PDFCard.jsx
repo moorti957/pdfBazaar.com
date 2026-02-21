@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./PDFCard1.css";
-
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -493,14 +493,22 @@ const PDFCard = () => {
 
                 {/* Favorite Button */}
                 <button
-                  className={`favorite-btn ${favorites.includes(pdf._id) ? "active" : ""}`}
-                  onClick={() => toggleFavorite(pdf._id)}
-                  title={favorites.includes(pdf._id) ? "Remove from favorites" : "Add to favorites"}
-                >
-                  {favorites.includes(pdf._id) ? "❤️" : "🤍"}
-                </button>
+  className={`favorite-btn ${favorites.includes(pdf._id) ? "active" : ""}`}
+  onClick={() => toggleFavorite(pdf._id)}
+  title={
+    favorites.includes(pdf._id)
+      ? "Remove from favorites"
+      : "Add to favorites"
+  }
+>
+  {favorites.includes(pdf._id) ? (
+    <FaHeart className="heart-icon active" />
+  ) : (
+    <FaRegHeart className="heart-icon" />
+  )}
+</button>
 
-                {/* Plan Restriction Message */}
+                
                 {userPlan === "free" && downloadCount >= downloadLimit && (
                   <div className="plan-restriction">
                     <small>⚠️ Download limit reached. Upgrade plan.</small>
@@ -515,7 +523,7 @@ const PDFCard = () => {
             ))}
           </div>
           
-          {/* Show More/Less Button - Enhanced with better styling */}
+          
           {filteredPdfs.length > maxDisplayLimit && (
             <div className="show-more-wrapper">
               <button 

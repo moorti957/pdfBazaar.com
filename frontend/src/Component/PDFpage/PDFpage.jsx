@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./PDFpage.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 // Create axios instance with base URL
 const api = axios.create({
@@ -620,7 +621,11 @@ const toggleFavorite = async (pdfId) => {
   className={`favorite-btn ${favorites.includes(pdf._id) ? "active" : ""}`}
   onClick={() => toggleFavorite(pdf._id)}
 >
-  {favorites.includes(pdf._id) ? "❤️" : "🤍"}
+  {favorites.includes(pdf._id) ? (
+    <FaHeart className="heart-icon active" />
+  ) : (
+    <FaRegHeart className="heart-icon" />
+  )}
 </button>
 
                 
@@ -632,7 +637,7 @@ const toggleFavorite = async (pdfId) => {
             ))}
           </div>
           
-          <div className="pagination-info">
+          <div className="pagination-info1">
             <p>
               Showing {filteredPdfs.length} of {pdfs.filter(p => p.pdfUrl).length} PDFs
               {selectedCategory !== 'all' && ` in ${selectedCategory} category`}

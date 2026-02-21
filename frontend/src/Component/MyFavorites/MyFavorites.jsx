@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+import { FaHeart } from "react-icons/fa";
 import axios from "axios";
 
 const api = axios.create({
@@ -432,12 +433,12 @@ const MyFavorites = () => {
 
                 {/* Remove Heart Button */}
                 <button
-                  className="favorite-btn active"
-                  onClick={() => removeFavorite(pdf._id)}
-                  title="Remove from favorites"
-                >
-                  ❤️
-                </button>
+  className="favorite-btn active"
+  onClick={() => removeFavorite(pdf._id)}
+  title="Remove from favorites"
+>
+  <FaHeart className="heart-icon active" />
+</button>
 
                 {/* Purchase message */}
                 <div className="plan-restriction">
@@ -447,7 +448,7 @@ const MyFavorites = () => {
             ))}
           </div>
           
-          <div className="pagination-info">
+          <div className="pagination-info1">
             <p>
               Showing {filteredFavorites.length} of {favorites.length} favorites
               {selectedCategory !== 'all' && ` in ${selectedCategory} category`}
