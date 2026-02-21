@@ -2,18 +2,25 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import Customer from "../models/Customer.js";
 
+
 // ================= REGISTER =================
 export const register = async (req, res) => {
   try {
     const { name, email, phone, address, password } = req.body;
 
     if (!name || !email || !password) {
-      return res.status(400).json({ message: "All required fields missing" });
+      return res.status(400).json({
+        success: false,
+        message: "All required fields missing"
+      });
     }
 
     const userExist = await User.findOne({ email });
     if (userExist) {
-      return res.status(400).json({ message: "Email already exists" });
+      return res.status(400).json({
+        success: false,
+        message: "Email already exists"
+      });
     }
 
     const user = await User.create({
@@ -26,7 +33,7 @@ export const register = async (req, res) => {
       pdfDownloadCount: 0
     });
 
-    // 🔥 CREATE CUSTOMER FOR ADMIN PANEL
+    // Create customer entry
     await Customer.create({
       name,
       email,
@@ -38,10 +45,10 @@ export const register = async (req, res) => {
       lastActive: new Date()
     });
 
-    // ✅ FIXED TOKEN PAYLOAD
+    // ✅ CORRECT TOKEN PAYLOAD
     const token = jwt.sign(
-      { userId: user._id, role: user.role },
-      process.env.JWT_SECRET || "secret123",
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
@@ -59,9 +66,14 @@ export const register = async (req, res) => {
 
   } catch (error) {
     console.error("REGISTER ERROR:", error);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
   }
 };
+
+
 
 // ================= LOGIN =================
 export const login = async (req, res) => {
@@ -71,7 +83,7 @@ export const login = async (req, res) => {
     if (!email || !password) {
       return res.status(400).json({
         success: false,
-        message: "Email aur password dono required hain"
+        message: "Email and password are required"
       });
     }
 
@@ -93,10 +105,10 @@ export const login = async (req, res) => {
       });
     }
 
-    // ✅ FIXED TOKEN PAYLOAD
+    // ✅ FIXED TOKEN (NO userId)
     const token = jwt.sign(
-      { userId: user._id, role: user.role },
-      process.env.JWT_SECRET || "secret123",
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
@@ -114,13 +126,15 @@ export const login = async (req, res) => {
     });
 
   } catch (error) {
-    console.error("LOGIN ERROR FULL:", error);
+    console.error("LOGIN ERROR:", error);
     res.status(500).json({
       success: false,
       message: error.message || "Server error"
     });
   }
 };
+
+
 
 // ================= CURRENT USER =================
 export const getCurrentUser = async (req, res) => {

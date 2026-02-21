@@ -12,6 +12,7 @@ import { UserProvider } from "./context/UserContext";
 import Profile from "./Component/Profile/Profile";
 import { Profiler } from "react";
 import ProfileEdit from "./Component/Profile/ProfileEdit";
+import MyFavorites from "./Component/MyFavorites/MyFavorites";
 
 
 
@@ -28,6 +29,8 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<Profile/>} />
+        <Route path="/favorites" element={<MyFavorites/>} />
+
         {/* <Route path="/admin/login" element={<AdminLogin/>} />
         <Route path="/admin/dashboard" element={<AdminDashboard/>} />
         <Route path="/admin/add-pdf" element={<AddPDF/>} /> */}

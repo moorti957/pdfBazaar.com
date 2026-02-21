@@ -1,0 +1,180 @@
+.pdfs-page1 {
+
+  min-height: 100vh;
+    background: linear-gradient(90deg, #ffffff, #d1e5fa 100%);
+  padding: 30px;
+  color: #333;
+ 
+}
+
+/* PDF Cards Grid - Exactly 3 cards per row */
+.pdfs-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Forces exactly 3 columns */
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+/* PDF Card styling */
+.pdf-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* Ensures card takes full column width */
+  box-sizing: border-box;
+}
+
+.pdf-card:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 1024px) {
+  .pdfs-container {
+    grid-template-columns: repeat(2, 1fr); /* 2 cards per row on tablets */
+  }
+}
+
+@media (max-width: 768px) {
+  .pdfs-container {
+    grid-template-columns: repeat(1, 1fr); /* 1 card per row on mobile */
+  }
+}
+
+/* Optional: If you want fixed width cards instead of responsive */
+@media (min-width: 1200px) {
+  .pdfs-container {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* ========== SHOW MORE SECTION - SIMPLE WHITE & SKY BLUE ========== */
+.show-more-wrapper {
+  text-align: center;
+  margin: 30px 0 20px;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e0f2fe;
+}
+
+/* Show More Button */
+.show-more-btn {
+  background: #38bdf8;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s;
+}
+
+.show-more-btn:hover {
+  background: #0ea5e9;
+}
+
+/* Button icon */
+.btn-icon {
+  font-size: 1.2rem;
+}
+
+/* Badge */
+.btn-badge {
+  background: white;
+  color: #0ea5e9;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-left: 8px;
+  border: 1px solid #e0f2fe;
+}
+
+/* Pagination Info */
+.pagination-info {
+  text-align: center;
+  margin-left: 100px;
+  margin-top: 15px;
+  color: #64748b;
+  font-size: 0.95rem;
+  background: #ffffff;
+  padding: 12px 20px;
+  border-radius: 6px;
+  display: inline-block;
+  border: 1px solid #e0f2fe;
+}
+
+/* Show More Text */
+.show-more-text {
+  color: #334155;
+  font-size: 0.95rem;
+}
+
+/* Highlight numbers */
+.highlight {
+  font-weight: 600;
+  color: #0ea5e9;
+  font-size: 1.1rem;
+  margin: 0 2px;
+}
+
+/* Simple pagination (when showing all) */
+.pagination-info.simple {
+  padding: 15px 25px;
+  background: #ffffff;
+  margin-top: 20px;
+  border-left: 3px solid #38bdf8;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .show-more-wrapper {
+    margin: 20px 0 15px;
+    padding: 15px;
+  }
+  
+  .show-more-btn {
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .btn-badge {
+    padding: 3px 8px;
+    font-size: 0.85rem;
+  }
+  
+  .pagination-info {
+    width: 100%;
+    padding: 10px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .show-more-btn {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .btn-badge {
+    margin-left: 0;
+  }
+  .pagination-info{
+    margin-left: 0;
+    width: 100%;
+  }
+}

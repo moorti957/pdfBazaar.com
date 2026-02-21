@@ -13,6 +13,15 @@ const userSchema = new mongoose.Schema({
 
   avatar: { type: String, default: "" },
 
+  // 🔥 ADD THIS SECTION
+  favorites: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product",
+      default: []
+    }
+  ],
+
   // 🔥 Subscription Plan System
   plan: {
     type: String,

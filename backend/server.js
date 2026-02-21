@@ -54,6 +54,7 @@ import uploadRoutes from "./routes/uploadRoutes.js";
 import pdfRoutes from "./routes/pdfRoutes.js";
 import downloadCheckRoutes from "./routes/download-check.js";
 // import subscriptionRoutes from "./routes/subscriptionRoutes.";
+import favoriteRoutes from "./routes/favoriteRoutes.js";
 
 app.use("/api/products", productRoutes);
 app.use("/api/auth", authRoutes);
@@ -65,6 +66,7 @@ app.use("/api/subscriptions", subscriptionRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api", pdfRoutes);
 app.use('/api/download-check', downloadCheckRoutes);
+app.use("/api/favorites", favoriteRoutes);
 
 
 

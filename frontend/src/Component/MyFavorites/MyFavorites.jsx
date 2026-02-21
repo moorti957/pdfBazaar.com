@@ -1,95 +1,55 @@
-import React, { useState, useEffect } from "react";
-import "./PDFCard1.css";
+import React, { useEffect, useState } from "react";
 
-import { Link } from "react-router-dom";
 import axios from "axios";
 
 const api = axios.create({
   baseURL: "http://localhost:5000",
-  timeout: 30000,
-  headers: { "Content-Type": "application/json" },
+  headers: { "Content-Type": "application/json" }
 });
 
-const PDFCard = () => {
-  const [pdfs, setPdfs] = useState([]);
-  const [filteredPdfs, setFilteredPdfs] = useState([]);
-  const [displayPdfs, setDisplayPdfs] = useState([]);
+const MyFavorites = () => {
+  const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [filteredFavorites, setFilteredFavorites] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortBy, setSortBy] = useState("newest");
-  
-  const [backendStatus, setBackendStatus] = useState('checking');
-  const [showPayModal, setShowPayModal] = useState(false);
-  const [selectedPdf, setSelectedPdf] = useState(null);
-  const [userPlan, setUserPlan] = useState("free");
-  const [downloadCount, setDownloadCount] = useState(0);
-  const [downloadLimit, setDownloadLimit] = useState(2);
-  const [showAll, setShowAll] = useState(false);
-  const [maxDisplayLimit, setMaxDisplayLimit] = useState(3); // Show only 3 PDFs initially
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [previewPdfUrl, setPreviewPdfUrl] = useState(null);
-  const [favorites, setFavorites] = useState([]);
+  const [showPayModal, setShowPayModal] = useState(false);
+  const [selectedPdf, setSelectedPdf] = useState(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    checkBackendStatus();
-    fetchPDFs();
-    fetchUserPlan();
     fetchFavorites();
   }, []);
 
+  // Filter favorites when category or search term changes
   useEffect(() => {
-    let filtered = [...pdfs];
-
-    // Filter by category
+    let filtered = favorites;
+    
     if (selectedCategory !== "all") {
       filtered = filtered.filter(pdf => pdf.category === selectedCategory);
     }
-
-    // Filter by search term
+    
     if (searchTerm) {
-      filtered = filtered.filter(pdf =>
-        pdf.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        pdf.description?.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(pdf => 
+        pdf.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (pdf.description && pdf.description.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     }
-
-    // Filter only PDFs that have pdfUrl
-    filtered = filtered.filter(pdf => pdf.pdfUrl);
-
-    // Sorting
-    filtered.sort((a, b) => {
-      switch (sortBy) {
-        case "newest":
-          return new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date);
-        case "oldest":
-          return new Date(a.createdAt || a.date) - new Date(b.createdAt || b.date);
-        case "price_asc":
-          return (a.price || 0) - (b.price || 0);
-        case "price_desc":
-          return (b.price || 0) - (a.price || 0);
-        case "name":
-          return (a.name || "").localeCompare(b.name || "");
-        default:
-          return 0;
-      }
-    });
-
-    setFilteredPdfs(filtered);
     
-    // Set display PDFs - Show only 3 initially
-    if (showAll) {
-      setDisplayPdfs(filtered);
-    } else {
-      setDisplayPdfs(filtered.slice(0, maxDisplayLimit));
-    }
-  }, [pdfs, selectedCategory, searchTerm, sortBy, showAll, maxDisplayLimit]);
+    setFilteredFavorites(filtered);
+  }, [favorites, selectedCategory, searchTerm]);
 
-  const toggleShowAll = () => {
-    setShowAll(!showAll);
-  };
+  // Extract unique categories from favorites
+  useEffect(() => {
+    const uniqueCategories = [...new Set(favorites
+      .filter(pdf => pdf.category)
+      .map(pdf => pdf.category)
+    )];
+    setCategories(uniqueCategories);
+  }, [favorites]);
 
   const fetchFavorites = async () => {
     try {
@@ -101,46 +61,30 @@ const PDFCard = () => {
       });
 
       if (res.data.success) {
-        setFavorites(res.data.favorites.map(f => typeof f === "object" ? f._id : f));
+        setFavorites(res.data.favorites);
       }
     } catch (err) {
-      console.error("Error fetching favorites:", err);
+      console.error("Favorite fetch error:", err);
+      setError("Failed to load favorites. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const toggleFavorite = async (pdfId) => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      alert("Please login first");
-      return;
-    }
-
-    const isFav = favorites.includes(pdfId);
-
-    // Instant UI update
-    if (isFav) {
-      setFavorites(prev => prev.filter(id => id !== pdfId));
-    } else {
-      setFavorites(prev => [...prev, pdfId]);
-    }
-
+  const removeFavorite = async (pdfId) => {
     try {
+      const token = localStorage.getItem("token");
+
       await api.post(
         "/api/favorites/toggle",
         { pdfId },
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-    } catch (error) {
-      console.error("Favorite Error:", error);
-      // Revert on error
-      if (isFav) {
-        setFavorites(prev => [...prev, pdfId]);
-      } else {
-        setFavorites(prev => prev.filter(id => id !== pdfId));
-      }
+
+      setFavorites(prev => prev.filter(pdf => pdf._id !== pdfId));
+    } catch (err) {
+      console.error("Remove error:", err);
+      alert("Failed to remove from favorites");
     }
   };
 
@@ -176,6 +120,7 @@ const PDFCard = () => {
         order_id: order.id,
         handler: async function (response) {
           try {
+            // Verify Payment
             await api.post(
               "/api/payment/verify-pdf-payment",
               {
@@ -192,9 +137,12 @@ const PDFCard = () => {
             );
 
             alert("Payment Successful! Download Starting...");
+
+            // Download after successful payment
             handleDownload(pdf.pdfUrl, pdf.name);
+
           } catch (err) {
-            console.error("VERIFY ERROR:", err);
+            console.error("VERIFY ERROR:", err.response?.data || err);
             alert("Payment done but verification failed");
           }
         },
@@ -203,101 +151,12 @@ const PDFCard = () => {
 
       const rzp = new window.Razorpay(options);
       rzp.open();
-      setShowPayModal(false);
+
     } catch (err) {
       console.error("PAYMENT ERROR:", err);
       alert("Payment failed");
-    }
-  };
-
-  const fetchUserPlan = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setUserPlan("free");
-        setDownloadCount(0);
-        return;
-      }
-
-      const res = await api.get("/api/users/me", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-
-      if (res.data.success) {
-        setUserPlan(res.data.user.plan || "free");
-        setDownloadCount(res.data.user.pdfDownloadCount || 0);
-        
-        if (res.data.user.plan === "premium") {
-          setDownloadLimit(999999);
-        } else if (res.data.user.plan === "standard") {
-          setDownloadLimit(15);
-        } else if (res.data.user.plan === "basic") {
-          setDownloadLimit(5);
-        } else {
-          setDownloadLimit(2);
-        }
-      }
-    } catch (err) {
-      console.error('Error fetching user plan:', err);
-      setUserPlan("free");
-      setDownloadCount(0);
-    }
-  };
-
-  const checkBackendStatus = async () => {
-    try {
-      const response = await api.get('/');
-      if (response.data.success) {
-        setBackendStatus('running');
-      }
-    } catch (error) {
-      console.error('Backend check failed:', error);
-      setBackendStatus('stopped');
-    }
-  };
-
-  const fetchPDFs = async () => {
-    try {
-      setLoading(true);
-      setError("");
-      
-      await checkBackendStatus();
-      
-      const res = await api.get("/api/products");
-      
-      if (res.data.success) {
-        setPdfs(res.data.products);
-        
-        const cats = [
-          ...new Set(res.data.products.map(p => p.category).filter(Boolean)),
-        ];
-        setCategories(cats);
-      }
-    } catch (err) {
-      setError("Unable to connect to server. Please try again later.");
     } finally {
-      setLoading(false);
-    }
-  };
-
-  const formatDate = (date) => {
-    if (!date) return "N/A";
-    const d = new Date(date);
-    return d.toLocaleDateString("en-IN", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    });
-  };
-
-  const getCategoryIcon = (category) => {
-    switch (category?.toLowerCase()) {
-      case 'skincare': return '🧴';
-      case 'haircare': return '💇';
-      case 'makeup': return '💄';
-      case 'fragrance': return '🌸';
-      case 'wellness': return '🌿';
-      default: return '📄';
+      setShowPayModal(false);
     }
   };
 
@@ -314,32 +173,42 @@ const PDFCard = () => {
         return;
       }
 
-      const res = await api.post(
-        "/api/download-check",
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      if (res.data.success) {
-        const link = document.createElement("a");
-        link.href = `http://localhost:5000${pdfUrl}`;
-        link.download = `${title.replace(/\s+/g, "-")}.pdf`;
-        link.target = '_blank';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-        fetchUserPlan();
-      }
+      const link = document.createElement("a");
+      link.href = `http://localhost:5000${pdfUrl}`;
+      link.download = `${title.replace(/\s+/g, "-")}.pdf`;
+      link.target = '_blank';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     } catch (err) {
       console.error('Download error:', err);
-      alert(err.response?.data?.message || "Download not allowed. Check your plan limits.");
+      alert("Download failed. Please try again.");
+    }
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-IN', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    });
+  };
+
+  const getCategoryIcon = (category) => {
+    switch (category?.toLowerCase()) {
+      case 'skincare': return '🧴';
+      case 'haircare': return '💇';
+      case 'makeup': return '💄';
+      case 'fragrance': return '🌸';
+      case 'wellness': return '🌿';
+      default: return '📄';
     }
   };
 
   const handleRefresh = () => {
-    fetchPDFs();
-    fetchUserPlan();
+    setLoading(true);
     fetchFavorites();
   };
 
@@ -362,67 +231,140 @@ const PDFCard = () => {
   }, [showPreviewModal]);
 
   return (
-    <section className="pdfs-page1">
-      {/* Header - Commented out as per your code */}
-      {/* Header JSX remains commented */}
+    <section className="pdfs-page">
+      {/* Header */}
+      <div className="pdfs-header">
+        <div className="header-left">
+          <h1>❤️ My Favorite PDFs</h1>
+          <p className="subtitle">All your saved documents in one place</p>
+        </div>
+        
+        <div className="header-right">
+          <button 
+            className="refresh-btn" 
+            onClick={handleRefresh}
+            disabled={loading}
+            title="Refresh Favorites"
+          >
+            {loading ? 'Refreshing...' : 'Refresh'}
+          </button>
+        </div>
+      </div>
 
-      {/* Stats Bar - Commented out as per your code */}
-      {/* Stats Bar JSX remains commented */}
+      {/* Stats Bar */}
+      <div className="stats-bar">
+        <div className="stat-item">
+          <span className="stat-number">{favorites.length}</span>
+          <span className="stat-label">Total Favorites</span>
+        </div>
+        <div className="stat-item">
+          <span className="stat-number">{filteredFavorites.length}</span>
+          <span className="stat-label">Showing</span>
+        </div>
+        <div className="stat-item">
+          <span className="stat-number">{categories.length}</span>
+          <span className="stat-label">Categories</span>
+        </div>
+      </div>
 
-      {/* Filters Section - Commented out as per your code */}
-      {/* Filters Section JSX remains commented */}
+      {/* Filters Section - Only show if there are favorites */}
+      {favorites.length > 0 && (
+        <div className="filters-section">
+          <div className="search-box">
+            <input
+              type="text"
+              placeholder="🔍 Search favorites by name or description..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+            {searchTerm && (
+              <button 
+                className="clear-search" 
+                onClick={() => setSearchTerm('')}
+                title="Clear search"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+          
+          <div className="category-filters">
+            <button
+              className={`category-btn ${selectedCategory === 'all' ? 'active' : ''}`}
+              onClick={() => setSelectedCategory('all')}
+            >
+              All Favorites
+            </button>
+            
+            {categories.map(category => (
+              <button
+                key={category}
+                className={`category-btn ${selectedCategory === category ? 'active' : ''}`}
+                onClick={() => setSelectedCategory(category)}
+              >
+                {getCategoryIcon(category)} {category}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
-      {/* Error Display */}
-      {/* {error && (
+      {error && (
         <div className="error-message">
           <div className="error-content">
             <span className="error-icon">⚠️</span>
             <span className="error-text">{error}</span>
           </div>
           <div className="error-actions">
-            <button onClick={fetchPDFs} className="retry-btn">Retry</button>
+            <button onClick={fetchFavorites} className="retry-btn">Retry</button>
             <button onClick={() => setError('')} className="dismiss-btn">Dismiss</button>
           </div>
         </div>
-      )} */}
+      )}
 
-      {/* Loading State */}
       {loading ? (
         <div className="loading-container">
           <div className="spinner"></div>
-          <p>Loading PDFs...</p>
-          <p className="loading-subtext">Checking backend connection...</p>
+          <p>Loading Favorites...</p>
         </div>
-      ) : displayPdfs.length === 0 ? (
+      ) : favorites.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-icon">📭</div>
-          <h3>No PDFs Found</h3>
+          <div className="empty-icon">💔</div>
+          <h3>No Favorites Yet</h3>
+          <p>You haven't saved any PDFs to your favorites.</p>
+          <p className="empty-subtext">Browse PDFs and click the heart icon to add them here!</p>
+          <button 
+            className="clear-filters-btn"
+            onClick={() => window.location.href = '/pdfs'}
+          >
+            Browse PDFs
+          </button>
+        </div>
+      ) : filteredFavorites.length === 0 ? (
+        <div className="empty-state">
+          <div className="empty-icon">🔍</div>
+          <h3>No Matching Favorites</h3>
           <p>
             {searchTerm 
-              ? `No PDFs found for "${searchTerm}"`
-              : selectedCategory !== 'all'
-                ? `No PDFs found in ${selectedCategory} category`
-                : backendStatus === 'stopped'
-                  ? 'Backend server is not running. Please start the backend.'
-                  : 'No PDFs available. Please upload some PDFs first.'
+              ? `No favorites found for "${searchTerm}"`
+              : `No favorites found in ${selectedCategory} category`
             }
           </p>
-          {(searchTerm || selectedCategory !== 'all') && (
-            <button 
-              className="clear-filters-btn"
-              onClick={() => {
-                setSearchTerm('');
-                setSelectedCategory('all');
-              }}
-            >
-              Clear Filters
-            </button>
-          )}
+          <button 
+            className="clear-filters-btn"
+            onClick={() => {
+              setSearchTerm('');
+              setSelectedCategory('all');
+            }}
+          >
+            Clear Filters
+          </button>
         </div>
       ) : (
         <>
           <div className="pdfs-container">
-            {displayPdfs.map((pdf) => (
+            {filteredFavorites.map((pdf) => (
               <div key={pdf._id} className="pdf-card">
                 <div className="pdf-card-header">
                   <div className="pdf-category">
@@ -463,9 +405,6 @@ const PDFCard = () => {
                         <span className="stat-value">{pdf.stock} in stock</span>
                       </div>
                     )}
-                    <div className="stat">
-                      <span className="stat-value">{pdf.sold || 0} sold</span>
-                    </div>
                   </div>
                 </div>
 
@@ -491,72 +430,30 @@ const PDFCard = () => {
                   </button>
                 </div>
 
-                {/* Favorite Button */}
+                {/* Remove Heart Button */}
                 <button
-                  className={`favorite-btn ${favorites.includes(pdf._id) ? "active" : ""}`}
-                  onClick={() => toggleFavorite(pdf._id)}
-                  title={favorites.includes(pdf._id) ? "Remove from favorites" : "Add to favorites"}
+                  className="favorite-btn active"
+                  onClick={() => removeFavorite(pdf._id)}
+                  title="Remove from favorites"
                 >
-                  {favorites.includes(pdf._id) ? "❤️" : "🤍"}
+                  ❤️
                 </button>
 
-                {/* Plan Restriction Message */}
-                {userPlan === "free" && downloadCount >= downloadLimit && (
-                  <div className="plan-restriction">
-                    <small>⚠️ Download limit reached. Upgrade plan.</small>
-                  </div>
-                )}
-                {userPlan !== "free" && (
-                  <div className="plan-restriction">
-                    <small>💰 Purchase required for download</small>
-                  </div>
-                )}
+                {/* Purchase message */}
+                <div className="plan-restriction">
+                  <small>💰 Purchase required for download</small>
+                </div>
               </div>
             ))}
           </div>
           
-          {/* Show More/Less Button - Enhanced with better styling */}
-          {filteredPdfs.length > maxDisplayLimit && (
-            <div className="show-more-wrapper">
-              <button 
-                className="show-more-btn"
-                onClick={toggleShowAll}
-              >
-                {showAll ? (
-                  <>
-                    <span className="btn-icon">↑</span>
-                    Show Less (Hide {filteredPdfs.length - maxDisplayLimit} PDFs)
-                  </>
-                ) : (
-                  <>
-                    <span className="btn-icon">↓</span>
-                    Show All {filteredPdfs.length} PDFs
-                    <span className="btn-badge">+{filteredPdfs.length - maxDisplayLimit} more</span>
-                  </>
-                )}
-              </button>
-              
-              {/* Summary Text */}
-              <div className="pagination-info">
-                <p className="show-more-text">
-                  <span className="highlight">{displayPdfs.length}</span> of <span className="highlight">{filteredPdfs.length}</span> PDFs showing
-                  {selectedCategory !== 'all' && ` in ${selectedCategory} category`}
-                  {searchTerm && ` matching "${searchTerm}"`}
-                </p>
-              </div>
-            </div>
-          )}
-          
-          {/* If exactly 3 PDFs or less, still show total count */}
-          {filteredPdfs.length <= maxDisplayLimit && filteredPdfs.length > 0 && (
-            <div className="pagination-info simple">
-              <p>
-                Showing all {filteredPdfs.length} PDFs
-                {selectedCategory !== 'all' && ` in ${selectedCategory} category`}
-                {searchTerm && ` matching "${searchTerm}"`}
-              </p>
-            </div>
-          )}
+          <div className="pagination-info">
+            <p>
+              Showing {filteredFavorites.length} of {favorites.length} favorites
+              {selectedCategory !== 'all' && ` in ${selectedCategory} category`}
+              {searchTerm && ` matching "${searchTerm}"`}
+            </p>
+          </div>
         </>
       )}
 
@@ -625,7 +522,7 @@ const PDFCard = () => {
                   </div>
                   <div className="detail-item">
                     <div className="detail-label">Stock Available</div>
-                    <div className="detail-value stock-info">{selectedPdf.stock || 0} copies</div>
+                    <div className="detail-value stock-info">{selectedPdf.stock} copies</div>
                   </div>
                   {selectedPdf.description && (
                     <div className="detail-item full-width">
@@ -695,14 +592,15 @@ const PDFCard = () => {
                 onClick={() => setShowPayModal(false)}
               >
                 <span className="btn-icon">←</span>
-                Back to PDFs
+                Back to Favorites
               </button>
               
               <div className="action-buttons">
                 <button
                   className="pay-btn"
-                  onClick={() => handlePayAndDownload(selectedPdf)}
-                  disabled={userPlan === "free" && downloadCount >= downloadLimit}
+                  onClick={() => {
+                    handlePayAndDownload(selectedPdf);
+                  }}
                 >
                   <span className="btn-icon">💳</span>
                   Pay ₹{selectedPdf.price} & Download
@@ -732,7 +630,7 @@ const PDFCard = () => {
             {/* BODY */}
             <div
               className="preview-body"
-              onContextMenu={(e) => e.preventDefault()}
+              onContextMenu={(e) => e.preventDefault()} // right click disable
             >
               {/* PDF IFRAME */}
               <iframe
@@ -740,7 +638,7 @@ const PDFCard = () => {
                 title="PDF Preview"
               />
 
-              {/* WATERMARK */}
+              {/* 🔥 WATERMARK (PREVIEW ONLY) */}
               <div className="pdf-watermark">
                 © yourwebsite.com
               </div>
@@ -752,4 +650,4 @@ const PDFCard = () => {
   );
 };
 
-export default PDFCard;
+export default MyFavorites;

@@ -141,7 +141,7 @@ const PDFs = () => {
   };
 
   const fetchUserPlan = async () => {
-    try {
+    try{
       const token = localStorage.getItem("token");
       if (!token) return;
 
@@ -332,7 +332,11 @@ const fetchFavorites = async () => {
   });
 
   if (res.data.success) {
-    setFavorites(res.data.favorites.map(f => f._id));
+    setFavorites(
+  res.data.favorites.map(f => 
+    typeof f === "object" ? f._id : f
+  )
+);
   }
 };
 
@@ -342,19 +346,63 @@ useEffect(() => {
 
 const toggleFavorite = async (pdfId) => {
   const token = localStorage.getItem("token");
+
   if (!token) {
     alert("Please login first");
     return;
   }
 
-  const res = await api.post(
-    "/api/favorites/toggle",
-    { pdfId },
-    { headers: { Authorization: `Bearer ${token}` } }
-  );
+  if (!pdfId) {
+    console.error("PDF ID is missing!");
+    alert("Invalid PDF ID");
+    return;
+  }
 
-  if (res.data.success) {
-    setFavorites(res.data.favorites);
+  console.log("Sending PDF ID:", pdfId);   // 🔍 DEBUG
+
+  // ✅ Instant UI update
+  const isFav = favorites.includes(pdfId);
+
+  if (isFav) {
+    setFavorites(prev => prev.filter(id => id !== pdfId));
+  } else {
+    setFavorites(prev => [...prev, pdfId]);
+  }
+
+  try {
+    const res = await api.post(
+      "/api/favorites/toggle",
+      { pdfId },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+    console.log("Server Response:", res.data);  // 🔍 DEBUG
+
+    // ✅ Always sync with backend response
+    if (res.data.success) {
+     setFavorites(
+  res.data.favorites.map(f =>
+    typeof f === "object" ? f._id : f
+  )
+);
+    }
+
+  } catch (error) {
+    console.error("Favorite Error:", error.response?.data || error);
+
+    // ❌ If error, revert UI change
+    if (isFav) {
+      setFavorites(prev => [...prev, pdfId]);
+    } else {
+      setFavorites(prev => prev.filter(id => id !== pdfId));
+    }
+
+    alert(error.response?.data?.message || "Something went wrong");
   }
 };
 
@@ -620,7 +668,7 @@ const toggleFavorite = async (pdfId) => {
               >
                 &times;
               </button>
-            </div>
+            </div>x``
 
             {/* Two-column layout */}
             <div className="pay-modal-content">

@@ -1,14 +1,37 @@
 /* Payment Modal Styles */
 
 .favorite-btn {
-  background: none;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: white;
   border: none;
-  font-size: 20px;
+  font-size: 24px;
   cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  z-index: 10;
+  padding: 0;
+  line-height: 1;
 }
 
 .favorite-btn.active {
-  color: red;
+  color: #ff4444 !important;
+  background: white;
+}
+
+
+.favorite-btn.active svg,
+.favorite-btn.active span,
+.favorite-btn.active {
+  color: #ff4444 !important;
+  fill: #ff4444 !important;
 }
 
 .preview-body {
@@ -936,6 +959,7 @@
 
 /* PDF Card */
 .pdf-card {
+  position: relative;  /* Ye add karo */
   background: white;
   border-radius: 12px;
   width: 100%;
@@ -943,6 +967,21 @@
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   border: 1px solid #e3f2fd;
+}
+
+.favorite-btn .heart-icon {
+  color: #999;
+  transition: all 0.3s ease;
+}
+
+.favorite-btn.active .heart-icon {
+  color: #ff4444;
+  fill: #ff4444;
+}
+
+.favorite-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
 }
 
 .pdf-card:hover {

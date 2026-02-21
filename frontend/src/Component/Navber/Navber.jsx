@@ -84,8 +84,8 @@ const Navbar = () => {
             </Link>
           </li>
           <li className="nav-item">
-            <Link to="/pricing" className="nav-link" onClick={toggleMenu}>
-              Pricing
+            <Link to="/favorites" className="nav-link" onClick={toggleMenu}>
+              My Favorites
             </Link>
           </li>
           <li className="nav-item">
