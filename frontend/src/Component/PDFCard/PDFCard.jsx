@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./PDFCard1.css";
+import "./Pdfcard1.css";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import axios from "axios";

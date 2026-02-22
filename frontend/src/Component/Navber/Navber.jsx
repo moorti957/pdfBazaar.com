@@ -5,6 +5,7 @@ import "./Navber.css";
 import { assets } from "../../assets/assets";
 import { UserContext } from "../../context/UserContext";
 import API from "../../config/api";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,13 +13,18 @@ const Navbar = () => {
   const { user, logout } = useContext(UserContext);
   const dropdownRef = useRef(null);
   const profileImgRef = useRef(null);
+  const navigate = useNavigate();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
-  const handleProfileClick = () => {
+const handleProfileClick = () => {
+  if (window.innerWidth <= 768) {
+    navigate("/profile");
+  } else {
     setShowDropdown(!showDropdown);
     if (isOpen) setIsOpen(false);
-  };
+  }
+};
 
   const handleLogout = () => {
     logout();
