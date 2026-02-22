@@ -19,7 +19,12 @@ const Navbar = () => {
 
 const handleProfileClick = () => {
   if (window.innerWidth <= 768) {
-    navigate("/profile");
+    setIsOpen(false);
+    setShowDropdown(false);
+
+    setTimeout(() => {
+      navigate("/profile");
+    }, 200); // animation time ke according
   } else {
     setShowDropdown(!showDropdown);
     if (isOpen) setIsOpen(false);
