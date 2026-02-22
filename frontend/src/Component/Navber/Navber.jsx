@@ -4,6 +4,7 @@ import { FaBars, FaTimes, FaUserCircle } from "react-icons/fa";
 import "./Navber.css";
 import { assets } from "../../assets/assets";
 import { UserContext } from "../../context/UserContext";
+import API from "../../config/api";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -102,7 +103,7 @@ const Navbar = () => {
                   ref={profileImgRef}
                   src={
                     user?.avatar
-                      ? `http://localhost:5000${user.avatar}`
+                      ? `${API}${user.avatar}`
                       : "https://i.pravatar.cc/150?img=12"
                   }
                   alt="profile"
@@ -132,8 +133,8 @@ const Navbar = () => {
       <img
         src={
           user?.avatar
-            ? `http://localhost:5000${user.avatar}`
-            : "https://i.pravatar.cc/150?img=12"
+  ? `${API}${user.avatar}`
+  : "https://i.pravatar.cc/150?img=12"
         }
         alt="profile"
         className="user-avatar-large"

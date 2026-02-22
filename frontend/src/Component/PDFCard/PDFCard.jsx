@@ -3,9 +3,10 @@ import "./PDFCard1.css";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import API from "../../config/api";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: API,
   timeout: 30000,
   headers: { "Content-Type": "application/json" },
 });
@@ -302,7 +303,7 @@ const PDFCard = () => {
   };
 
   const handlePreview = (pdfUrl) => {
-    setPreviewPdfUrl(`http://localhost:5000${pdfUrl}`);
+    setPreviewPdfUrl(`${API}${pdfUrl}`);
     setShowPreviewModal(true);
   };
 
@@ -322,7 +323,7 @@ const PDFCard = () => {
 
       if (res.data.success) {
         const link = document.createElement("a");
-        link.href = `http://localhost:5000${pdfUrl}`;
+        link.href = `${API}${pdfUrl}`;
         link.download = `${title.replace(/\s+/g, "-")}.pdf`;
         link.target = '_blank';
         document.body.appendChild(link);
@@ -436,7 +437,7 @@ const PDFCard = () => {
                 <div className="pdf-card-body">
                   {pdf.imageUrl ? (
                     <img
-                      src={`http://localhost:5000${pdf.imageUrl}`}
+                      src={`${API}${pdf.imageUrl}`}
                       alt={pdf.name}
                       className="pdf-image"
                       onError={(e) => {
@@ -600,7 +601,7 @@ const PDFCard = () => {
                 <div className="pdf-preview">
                   {selectedPdf.imageUrl ? (
                     <img 
-                      src={`http://localhost:5000${selectedPdf.imageUrl}`} 
+                      src={`${API}${selectedPdf.imageUrl}`}
                       alt={selectedPdf.name}
                       className="pdf-preview-img"
                       onError={(e) => {

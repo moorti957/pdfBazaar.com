@@ -3,10 +3,11 @@ import "./PDFpage.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import API from "../../config/api";
 
 // Create axios instance with base URL
 const api = axios.create({
-  baseURL: 'http://localhost:5000',
+   baseURL: import.meta.env.VITE_API_URL,
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
@@ -288,7 +289,7 @@ const PDFs = () => {
 
       if (res.data.success) {
         const link = document.createElement("a");
-        link.href = `http://localhost:5000${pdfUrl}`;
+        link.href = `${import.meta.env.VITE_API_URL}${pdfUrl}`;
         link.download = `${title.replace(/\s+/g, "-")}.pdf`;
         link.target = '_blank';
         document.body.appendChild(link);
@@ -304,7 +305,7 @@ const PDFs = () => {
   };
 
 const handlePreview = (pdfUrl) => {
-  setPreviewPdfUrl(`http://localhost:5000${pdfUrl}`);
+  setPreviewPdfUrl(`${import.meta.env.VITE_API_URL}${pdfUrl}`);
   setShowPreviewModal(true);
 };
 useEffect(() => {
@@ -565,7 +566,7 @@ const toggleFavorite = async (pdfId) => {
                 <div className="pdf-card-body">
                   {pdf.imageUrl ? (
                     <img 
-                      src={`http://localhost:5000${pdf.imageUrl}`} 
+                      src={`${import.meta.env.VITE_API_URL}${pdf.imageUrl}`}
                       alt={pdf.name}
                       className="pdf-image"
                       onError={(e) => {

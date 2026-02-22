@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 
 import { FaHeart } from "react-icons/fa";
 import axios from "axios";
+import API from "../../config/api";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: API,
   headers: { "Content-Type": "application/json" }
 });
 
@@ -162,7 +163,7 @@ const MyFavorites = () => {
   };
 
   const handlePreview = (pdfUrl) => {
-    setPreviewPdfUrl(`http://localhost:5000${pdfUrl}`);
+    setPreviewPdfUrl(`${API}${pdfUrl}`);
     setShowPreviewModal(true);
   };
 
@@ -175,7 +176,7 @@ const MyFavorites = () => {
       }
 
       const link = document.createElement("a");
-      link.href = `http://localhost:5000${pdfUrl}`;
+     link.href = `${API}${pdfUrl}`;
       link.download = `${title.replace(/\s+/g, "-")}.pdf`;
       link.target = '_blank';
       document.body.appendChild(link);
@@ -379,7 +380,7 @@ const MyFavorites = () => {
                 <div className="pdf-card-body">
                   {pdf.imageUrl ? (
                     <img
-                      src={`http://localhost:5000${pdf.imageUrl}`}
+                      src={`${API}${pdf.imageUrl}`}
                       alt={pdf.name}
                       className="pdf-image"
                       onError={(e) => {
@@ -490,7 +491,7 @@ const MyFavorites = () => {
                 <div className="pdf-preview">
                   {selectedPdf.imageUrl ? (
                     <img 
-                      src={`http://localhost:5000${selectedPdf.imageUrl}`} 
+                     src={`${API}${selectedPdf.imageUrl}`}
                       alt={selectedPdf.name}
                       className="pdf-preview-img"
                       onError={(e) => {

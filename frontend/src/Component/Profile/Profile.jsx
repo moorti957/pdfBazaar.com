@@ -3,6 +3,7 @@ import axios from "axios";
 import "./Profile.css";
 import { UserContext } from "../../context/UserContext.jsx";
 import { useContext } from "react";
+import API from "../../config/api";
 
 const Profile = () => {
   const [open, setOpen] = useState(false);
@@ -22,12 +23,16 @@ const Profile = () => {
   const getUser = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/users/${USER_ID}`,
+         `${import.meta.env.VITE_API_URL}/api/users/${USER_ID}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setUser(res.data.user);
       setFormData(res.data.user);
-      setPreview(res.data.user.avatar);
+      setPreview(
+             res.data.user.avatar
+       ? `${API}${res.data.user.avatar}`
+          : null
+      );
     } catch (err) {
       console.log("Profile Error:", err);
     }
@@ -37,7 +42,7 @@ const Profile = () => {
   const getPlan = async () => {
     try {
      const res = await axios.get(
-  `http://localhost:5000/api/subscriptions/my-plan`,
+         `${import.meta.env.VITE_API_URL}/api/subscriptions/my-plan`,
   { headers: { Authorization: `Bearer ${token}` } }
 );
 
@@ -81,7 +86,7 @@ const Profile = () => {
       }
 
       const res = await axios.put(
-        `http://localhost:5000/api/users/${USER_ID}`,
+         `${import.meta.env.VITE_API_URL}/api/users/${USER_ID}`,
         form,
         {
           headers: {
@@ -92,7 +97,11 @@ const Profile = () => {
 
       setUser(res.data.user);
       setFormData(res.data.user);
-      setPreview(`${res.data.user.avatar}?t=${Date.now()}`);
+      setPreview(
+  res.data.user.avatar
+    ? `${API}${res.data.user.avatar}?t=${Date.now()}`
+    : null
+);
       updateUser({
                ...res.data.user,
             id: res.data.user._id

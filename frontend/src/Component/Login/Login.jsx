@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import "./Login.css";
 import { UserContext } from "../../context/UserContext";
 import { FaUser, FaEnvelope, FaPhone, FaHome, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
+import API from "../../config/api";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -48,8 +49,8 @@ const Auth = () => {
 
     try {
       const endpoint = isLogin
-        ? "http://localhost:5000/api/auth/login"
-        : "http://localhost:5000/api/auth/register";
+            ? `${API}/api/auth/login`
+             : `${API}/api/auth/register`;
 
       const apiData = isLogin 
         ? { email: formData.email, password: formData.password }
