@@ -4,6 +4,14 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import API from "../../config/api";
+import { Document, Page, pdfjs } from "react-pdf";
+import "react-pdf/dist/Page/AnnotationLayer.css";
+import "react-pdf/dist/Page/TextLayer.css";
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.mjs",
+  import.meta.url
+).toString();
 
 // Create axios instance with base URL
 const api = axios.create({
@@ -38,7 +46,7 @@ const PDFs = () => {
   const [showPayModal, setShowPayModal] = useState(false);
   const [selectedPdf, setSelectedPdf] = useState(null);
   const [favorites, setFavorites] = useState([]);
-
+  const [numPages, setNumPages] = useState(null);
   
   // User plan and download count state
   const [userPlan, setUserPlan] = useState("free");
@@ -305,7 +313,11 @@ const PDFs = () => {
   };
 
 const handlePreview = (pdfUrl) => {
-  setPreviewPdfUrl(`${import.meta.env.VITE_API_URL}${pdfUrl}`);
+  const fullUrl = `${import.meta.env.VITE_API_URL}/${pdfUrl.replace(/^\/+/, "")}`;
+
+  console.log("PDF URL 👉", fullUrl);
+
+  setPreviewPdfUrl(fullUrl);
   setShowPreviewModal(true);
 };
 useEffect(() => {
@@ -833,11 +845,16 @@ const toggleFavorite = async (pdfId) => {
         onContextMenu={(e) => e.preventDefault()} // right click disable
       >
         {/* PDF IFRAME */}
-        <iframe
-          src={`${previewPdfUrl}#toolbar=0&navpanes=0&scrollbar=0`}
-          title="PDF Preview"
-        />
-
+        <div className="pdf-viewer">
+ <Document
+  file={previewPdfUrl}
+  onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+>
+  {Array.from(new Array(numPages), (el, index) => (
+    <Page key={`page_${index + 1}`} pageNumber={index + 1} />
+  ))}
+</Document>
+</div>
         {/* 🔥 WATERMARK (PREVIEW ONLY) */}
         <div className="pdf-watermark">
           © yourwebsite.com
