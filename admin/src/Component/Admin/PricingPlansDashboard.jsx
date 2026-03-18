@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './PricingPlansDashboard.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,14 +17,12 @@ const PricingPlansDashboard = () => {
   });
 
   // ये फंक्शन आपके backend से डेटा fetch करेगा
-  const fetchPurchases = async () => {
+  const fetchPurchases = useCallback(async () => {
   try {
     setLoading(true);
 
-   const response = await fetch('https://pdfbazaar.onrender.com/api/payment/purchases');
+    const response = await fetch('https://pdfbazaar.onrender.com/api/payment/purchases');
     const data = await response.json();
-
-    console.log("PURCHASE API RESPONSE:", data);
 
     const purchaseArray = Array.isArray(data) 
       ? data 
@@ -41,7 +39,7 @@ const PricingPlansDashboard = () => {
   } finally {
     setLoading(false);
   }
-};
+}, []);
 
 
   const calculateStats = (purchaseData) => {
@@ -58,9 +56,9 @@ const PricingPlansDashboard = () => {
     });
   };
 
-  useEffect(() => {
-    fetchPurchases();
-  }, []);
+useEffect(() => {
+  fetchPurchases();
+}, [fetchPurchases]);
 
   const filteredPurchases = purchases.filter(purchase => {
     const matchesSearch = 
