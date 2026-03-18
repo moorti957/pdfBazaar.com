@@ -21,7 +21,7 @@ const PricingPlansDashboard = () => {
   try {
     setLoading(true);
 
-    const response = await fetch('http://localhost:5000/api/payment/purchases');
+   const response = await fetch('https://pdfbazaar.onrender.com/api/payment/purchases');
     const data = await response.json();
 
     console.log("PURCHASE API RESPONSE:", data);

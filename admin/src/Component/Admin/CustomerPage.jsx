@@ -45,7 +45,7 @@ const CustomerPage = () => {
   const fetchCustomers = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:5000/api/customers');
+      const response = await axios.get('https://pdfbazaar.onrender.com/api/customers');
       if (response.data.success) {
         setCustomers(response.data.customers);
         setFilteredCustomers(response.data.customers);
@@ -59,7 +59,7 @@ const CustomerPage = () => {
 
   const fetchCustomerStats = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/customers/stats');
+      const response = await axios.get('https://pdfbazaar.onrender.com/api/customers/stats');
       if (response.data.success) {
         setStats(response.data);
       }
@@ -96,7 +96,7 @@ const CustomerPage = () => {
   const handleDeleteCustomer = async (customerId) => {
     if (window.confirm('Are you sure you want to delete this customer?')) {
       try {
-        const response = await axios.delete(`http://localhost:5000/api/customers/${customerId}`);
+        const response = await axios.delete(`https://pdfbazaar.onrender.com/api/customers/${customerId}`);
         if (response.data.success) {
           alert('Customer deleted successfully!');
           fetchCustomers();
@@ -115,7 +115,7 @@ const CustomerPage = () => {
     
     if (window.confirm(`Are you sure you want to ${action} this customer?`)) {
       try {
-        const response = await axios.put(`http://localhost:5000/api/customers/${customerId}/status`, {
+        const response = await axios.put(`https://pdfbazaar.onrender.com/api/customers/${customerId}/status`, {
           status: newStatus
         });
         

@@ -30,7 +30,7 @@ export default function AdminPdfUpload() {
       setLoading(true);
 
       // 👉 Yahan apni backend API lagao
-      const res = await fetch("https://your-backend-url/upload", {
+      const res = await fetch("https://pdfbazaar.onrender.com/upload", {
         method: "POST",
         body: formData,
       });

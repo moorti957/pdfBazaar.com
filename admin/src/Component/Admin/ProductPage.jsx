@@ -27,7 +27,7 @@ const ProductPage = () => {
   const fetchProducts = async () => {
     try {
       setProductsLoading(true);
-      const response = await axios.get('http://localhost:5000/api/products');
+      const response = await axios.get('https://pdfbazaar.onrender.com/api/products');
       if (response.data.success) {
         setProducts(response.data.products);
       }
@@ -108,7 +108,7 @@ const ProductPage = () => {
       console.log('🚀 Sending to server...');
       
       const response = await axios.post(
-        'http://localhost:5000/api/products', 
+        'https://pdfbazaar.onrender.com/api/products', 
         formDataToSend,
         {
           headers: {
@@ -401,7 +401,7 @@ const ProductPage = () => {
                     <div className="product-files">
                       {product.imageUrl && (
                         <a 
-                          href={`http://localhost:5000${product.imageUrl}`} 
+                         href={`https://pdfbazaar.onrender.com${product.imageUrl}`} 
                           target="_blank" 
                           rel="noopener noreferrer"
                           className="file-link"
@@ -412,7 +412,7 @@ const ProductPage = () => {
                       
                       {product.pdfUrl && (
                         <a 
-                          href={`http://localhost:5000${product.pdfUrl}`} 
+                          href={`https://pdfbazaar.onrender.com${product.pdfUrl}`}
                           target="_blank" 
                           rel="noopener noreferrer"
                           className="file-link"
