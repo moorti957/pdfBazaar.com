@@ -8,7 +8,7 @@ import PricingPlansDashboard from './Component/Admin/PricingPlansDashboard';
 
 function App() {
   return (
-    <Router basename="/admin">
+    <Router>
       <div className="App">
         <Routes>
           <Route path="/" element={<AdminPanel />} />
